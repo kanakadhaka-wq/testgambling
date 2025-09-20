@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Originals BlackJack Casino - 0.5% House Edge</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Left Sidebar -->
+    <aside class="left-sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">OC</div>
+            <div class="sidebar-title">Originals</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Games</div>
+            <button class="sidebar-item active">
+                <i class="fas fa-cards-blank"></i>
+                <span>Blackjack</span>
+            </button>
+            <button class="sidebar-item disabled" title="Coming soon">
+                <i class="fas fa-dice"></i>
+                <span>Dice</span>
+            </button>
+            <button class="sidebar-item disabled" title="Coming soon">
+                <i class="fas fa-bullseye"></i>
+                <span>Plinko</span>
+            </button>
+            <button class="sidebar-item disabled" title="Coming soon">
+                <i class="fas fa-chevron-up"></i>
+                <span>Crash</span>
+            </button>
+        </nav>
+    </aside>
+    <div class="casino-container with-sidebar">
+        <!-- Header -->
+        <header class="casino-header">
+            <div class="logo">
+                <i class="fas fa-spade-s"></i>
+                <span>Blackjack Originals</span>
+            </div>
+            <div class="balance-display">
+                <div class="balance-item">
+                    <span class="balance-label">Balance:</span>
+                    <span class="balance-amount" id="balance">$1000.00</span>
+                    <span class="balance-flash" id="balanceFlash"></span>
+                </div>
+                <div class="balance-item">
+                    <span class="balance-label">Bet:</span>
+                    <span class="bet-amount" id="currentBet">$0.00</span>
+                </div>
+                <div class="balance-actions">
+                    <button class="action-btn deposit-btn" id="depositBtn">
+                        <i class="fas fa-wallet"></i> Deposit
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Layout -->
+        <div class="game-layout">
+            <!-- Left Side - Betting Panel -->
+            <div class="betting-panel">
+                <h3 class="panel-title">Place Your Bets</h3>
+                <div class="betting-panel-content">
+                    <div class="betting-controls" id="bettingControls">
+                    <div class="bet-input-row">
+                        <label for="mainBetInput">Main Bet</label>
+                        <div class="bet-input-wrap">
+                            <input type="number" id="mainBetInput" min="1" step="1" placeholder="$ Enter amount" />
+                            <div class="bet-quick">
+                                <button class="quick-btn" id="betMin">Min</button>
+                                <button class="quick-btn" id="betMax">Max</button>
+                                <button class="quick-btn" id="clearBet">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebets">
+                        <div class="sidebet-item">
+                            <div class="sidebet-info">
+                                <div class="sidebet-name">21+3</div>
+                                <div class="sidebet-odds">Up to 100:1</div>
+                            </div>
+                            <input type="number" id="bet21" min="0" step="1" placeholder="$0" />
+                        </div>
+                        <div class="sidebet-item">
+                            <div class="sidebet-info">
+                                <div class="sidebet-name">Pairs</div>
+                                <div class="sidebet-odds">Up to 25:1</div>
+                            </div>
+                            <input type="number" id="betPairs" min="0" step="1" placeholder="$0" />
+                        </div>
+                        <div class="sidebet-item">
+                            <div class="sidebet-info">
+                                <div class="sidebet-name">Bust It</div>
+                                <div class="sidebet-odds">Up to 250:1</div>
+                            </div>
+                            <input type="number" id="betBust" min="0" step="1" placeholder="$0" />
+                        </div>
+                    </div>
+                    <div class="bet-actions">
+                        <div class="bet-summary">
+                            <span>Total Wager:</span>
+                            <strong id="totalWagerDisplay">$0.00</strong>
+                        </div>
+                        <button class="action-btn deal-btn" id="dealBtn">Deal</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Center - Game Area -->
+            <main class="game-area">
+                <!-- Dealer Section -->
+                <section class="dealer-section">
+                    <div class="dealer-info">
+                        <h3><i class="fas fa-robot"></i> Dealer</h3>
+                        <div class="hand-value" id="dealerValue">0</div>
+                    </div>
+                    <div class="cards-container" id="dealerCards">
+                        <!-- Dealer cards will be added here -->
+                    </div>
+                </section>
+
+                <!-- Game Status -->
+                <div class="game-status" id="gameStatus">
+                    <div class="status-message">Place your bet to start playing!</div>
+                    <div class="house-edge-info">House Edge: 0.5% | RTP: 99.5%</div>
+                </div>
+
+                <!-- Player Section -->
+                <section class="player-section">
+                    <div class="player-info">
+                        <h3><i class="fas fa-user"></i> You</h3>
+                        <div class="hand-value" id="playerValue">0</div>
+                    </div>
+                    <div class="cards-container" id="playerCards">
+                        <!-- Player cards will be added here -->
+                    </div>
+                    <!-- Main Bet Chip -->
+                    <div class="main-chip-area">
+                        <div class="chip-spot">
+                            <div class="chip-label">Main Bet</div>
+                            <div class="chip chip-main" id="chipMain"><span class="chip-amount" id="chipMainAmt">$0</span></div>
+                        </div>
+                        <!-- Side Bet Win Notification -->
+                        <div class="sidebet-notification" id="sidebetNotification">
+                            <span id="sidebetText">Perfect Pair: 25:1</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-section">
+
+            <!-- Game Controls -->
+            <div class="game-controls" id="gameControls" style="display: none;">
+                <button class="action-btn hit-btn" id="hitBtn">
+                    <i class="fas fa-plus"></i> Hit
+                </button>
+                <button class="action-btn stand-btn" id="standBtn">
+                    <i class="fas fa-hand-paper"></i> Stand
+                </button>
+                <button class="action-btn double-btn" id="doubleBtn">
+                    <i class="fas fa-coins"></i> Double Down
+                </button>
+                <button class="action-btn split-btn" id="splitBtn">
+                    <i class="fas fa-expand-arrows-alt"></i> Split
+                </button>
+            </div>
+
+            <!-- New Game Button -->
+            <div class="new-game-section" id="newGameSection" style="display: none;">
+                <button class="action-btn new-game-btn" id="newGameBtn">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Panel -->
+        <div class="stats-panel">
+            <div class="stats-toggle" id="statsToggle">
+                <i class="fas fa-chart-bar"></i> Stats
+            </div>
+            <div class="stats-content" id="statsContent">
+                <div class="stat-item">
+                    <span class="stat-label">Games Played:</span>
+                    <span class="stat-value" id="gamesPlayed">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Games Won:</span>
+                    <span class="stat-value" id="gamesWon">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Win Rate:</span>
+                    <span class="stat-value" id="winRate">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Wagered:</span>
+                    <span class="stat-value" id="totalWagered">$0.00</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Net Profit:</span>
+                    <span class="stat-value" id="netProfit">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game History Panel -->
+        <div class="game-history-container">
+            <div class="history-header">
+                <h3><i class="fas fa-history"></i> Game History</h3>
+                <button class="clear-history" id="clearHistory">Clear</button>
+            </div>
+            <div class="history-table">
+                <div class="history-header-row">
+                    <div class="history-col result">Result</div>
+                    <div class="history-col bet">Bet</div>
+                    <div class="history-col payout">Payout</div>
+                    <div class="history-col time">Time</div>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">No games played yet</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Deposit Modal -->
+        <div class="modal-overlay" id="depositModal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-coins"></i> Deposit Crypto</h3>
+                    <button class="modal-close" id="depositClose" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="provider-grid">
+                        <div class="provider-card" data-coin="USDT">
+                            <div class="provider-icon">💵</div>
+                            <div class="provider-name">USDT (TRC20)</div>
+                        </div>
+                        <div class="provider-card" data-coin="BTC">
+                            <div class="provider-icon">₿</div>
+                            <div class="provider-name">Bitcoin</div>
+                        </div>
+                        <div class="provider-card" data-coin="ETH">
+                            <div class="provider-icon">◆</div>
+                            <div class="provider-name">Ethereum</div>
+                        </div>
+                    </div>
+                    <div class="deposit-details">
+                        <div class="deposit-row">
+                            <label>Selected Asset</label>
+                            <div id="selectedAsset">USDT (TRC20)</div>
+                        </div>
+                        <div class="deposit-row">
+                            <label>Deposit Address</label>
+                            <div class="address-row">
+                                <input type="text" id="depositAddress" readonly value="TRX-TEST-ADDRESS-1234-ABCD" />
+                                <button id="copyAddress" class="copy-btn"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <div class="address-hint">Send only the selected asset to this address. Sending other assets may result in loss of funds.</div>
+                        </div>
+                        <div class="deposit-row">
+                            <label>Simulate Credit (for testing)</label>
+                            <div class="simulate-row">
+                                <input type="number" id="simulateAmount" min="1" step="1" placeholder="Enter USD amount" />
+                                <button id="simulateCredit" class="action-btn deal-btn">Credit Balance</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-note">To integrate a real provider (e.g., Coinbase Commerce, NowPayments, or Circle), connect their API here to credit deposits automatically.</div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="shuffleSound" preload="auto"></audio>
+    <audio id="cardSound" preload="auto"></audio>
+    <audio id="winSound" preload="auto"></audio>
+    <audio id="chipSound" preload="auto"></audio>
+
+    <script src="blackjack.js"></script>
+</body>
+</html>
