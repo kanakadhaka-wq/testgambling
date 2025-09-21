@@ -54,7 +54,7 @@
                 </div>
                 <div class="balance-actions">
                     <button class="action-btn deposit-btn" id="depositBtn">
-                        <i class="fas fa-wallet"></i> Deposit
+                        <i class="fas fa-wallet"></i> Cashier
                     </button>
                 </div>
             </div>
@@ -107,6 +107,22 @@
                             <strong id="totalWagerDisplay">$0.00</strong>
                         </div>
                         <button class="action-btn deal-btn" id="dealBtn">Deal</button>
+
+                        <!-- Game Control Buttons (shown during gameplay) -->
+                        <div class="game-controls" id="gameControls">
+                            <button class="action-btn hit-btn" id="hitBtn">
+                                <i class="fas fa-plus"></i> Hit
+                            </button>
+                            <button class="action-btn stand-btn" id="standBtn">
+                                <i class="fas fa-hand-paper"></i> Stand
+                            </button>
+                            <button class="action-btn double-btn" id="doubleBtn">
+                                <i class="fas fa-coins"></i> Double Down
+                            </button>
+                            <button class="action-btn split-btn" id="splitBtn">
+                                <i class="fas fa-expand-arrows-alt"></i> Split
+                            </button>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -125,12 +141,6 @@
                     </div>
                 </section>
 
-                <!-- Game Status -->
-                <div class="game-status" id="gameStatus">
-                    <div class="status-message">Place your bet to start playing!</div>
-                    <div class="house-edge-info">House Edge: 0.5% | RTP: 99.5%</div>
-                </div>
-
                 <!-- Player Section -->
                 <section class="player-section">
                     <div class="player-info">
@@ -140,6 +150,12 @@
                     <div class="cards-container" id="playerCards">
                         <!-- Player cards will be added here -->
                     </div>
+
+                    <!-- Status Message -->
+                    <div class="status-display">
+                        <div class="status-message">Place your bet to start playing!</div>
+                    </div>
+
                     <!-- Main Bet Chip -->
                     <div class="main-chip-area">
                         <div class="chip-spot">
@@ -151,35 +167,32 @@
                             <span id="sidebetText">Perfect Pair: 25:1</span>
                         </div>
                     </div>
+
+                    <!-- GAME CONTROLS - UNDER CHIP AREA -->
+                    <div class="game-controls-direct" id="gameControlsDirect" style="display: none;">
+                        <button class="action-btn hit-btn" id="hitBtnDirect">
+                            <i class="fas fa-plus"></i> Hit
+                        </button>
+                        <button class="action-btn stand-btn" id="standBtnDirect">
+                            <i class="fas fa-hand-paper"></i> Stand
+                        </button>
+                        <button class="action-btn double-btn" id="doubleBtnDirect">
+                            <i class="fas fa-coins"></i> Double Down
+                        </button>
+                        <button class="action-btn split-btn" id="splitBtnDirect">
+                            <i class="fas fa-expand-arrows-alt"></i> Split
+                        </button>
+                        <button class="action-btn new-game-btn" id="newGameBtnDirect" disabled>
+                            <i class="fas fa-redo"></i> New Game
+                        </button>
+                    </div>
                 </section>
             </main>
         </div>
 
         <!-- Controls -->
         <div class="controls-section">
-
-            <!-- Game Controls -->
-            <div class="game-controls" id="gameControls" style="display: none;">
-                <button class="action-btn hit-btn" id="hitBtn">
-                    <i class="fas fa-plus"></i> Hit
-                </button>
-                <button class="action-btn stand-btn" id="standBtn">
-                    <i class="fas fa-hand-paper"></i> Stand
-                </button>
-                <button class="action-btn double-btn" id="doubleBtn">
-                    <i class="fas fa-coins"></i> Double Down
-                </button>
-                <button class="action-btn split-btn" id="splitBtn">
-                    <i class="fas fa-expand-arrows-alt"></i> Split
-                </button>
-            </div>
-
-            <!-- New Game Button -->
-            <div class="new-game-section" id="newGameSection" style="display: none;">
-                <button class="action-btn new-game-btn" id="newGameBtn">
-                    <i class="fas fa-redo"></i> New Game
-                </button>
-            </div>
+            <!-- Controls section is now empty - New Game button moved to game controls container -->
         </div>
 
         <!-- Statistics Panel -->
@@ -230,55 +243,129 @@
             </div>
         </div>
         
-        <!-- Deposit Modal -->
+        <!-- Cashier Modal -->
         <div class="modal-overlay" id="depositModal" style="display: none;">
             <div class="modal">
                 <div class="modal-header">
-                    <h3><i class="fas fa-coins"></i> Deposit Crypto</h3>
+                    <h3><i class="fas fa-cash-register"></i> Cashier</h3>
                     <button class="modal-close" id="depositClose" aria-label="Close">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="provider-grid">
-                        <div class="provider-card" data-coin="USDT">
-                            <div class="provider-icon">💵</div>
-                            <div class="provider-name">USDT (TRC20)</div>
+                    <!-- Tab Navigation -->
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" data-tab="deposit">Deposit</button>
+                        <button class="tab-btn" data-tab="withdraw">Withdraw</button>
+                        <button class="tab-btn" data-tab="tip">Tip</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Deposit Tab -->
+                        <div class="tab-pane active" id="depositTab">
+                            <div class="provider-grid">
+                                <div class="provider-card" data-coin="USDT">
+                                    <div class="provider-icon">💵</div>
+                                    <div class="provider-name">USDT (TRC20)</div>
+                                </div>
+                                <div class="provider-card" data-coin="BTC">
+                                    <div class="provider-icon">₿</div>
+                                    <div class="provider-name">Bitcoin</div>
+                                </div>
+                                <div class="provider-card" data-coin="ETH">
+                                    <div class="provider-icon">◆</div>
+                                    <div class="provider-name">Ethereum</div>
+                                </div>
+                            </div>
+                            <div class="deposit-details">
+                                <div class="deposit-row">
+                                    <label>Selected Asset</label>
+                                    <div id="selectedAsset">USDT (TRC20)</div>
+                                </div>
+                                <div class="deposit-row">
+                                    <label>Deposit Address</label>
+                                    <div class="address-row">
+                                        <input type="text" id="depositAddress" readonly value="TRX-TEST-ADDRESS-1234-ABCD" />
+                                        <button id="copyAddress" class="copy-btn"><i class="fas fa-copy"></i></button>
+                                    </div>
+                                    <div class="address-hint">Send only the selected asset to this address. Sending other assets may result in loss of funds.</div>
+                                </div>
+                                <div class="deposit-row">
+                                    <label>Simulate Credit (for testing)</label>
+                                    <div class="simulate-row">
+                                        <input type="number" id="simulateAmount" min="1" step="1" placeholder="Enter USD amount" />
+                                        <button id="simulateCredit" class="action-btn deal-btn">Credit Balance</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-note">To integrate a real provider (e.g., Coinbase Commerce, NowPayments, or Circle), connect their API here to credit deposits automatically.</div>
                         </div>
-                        <div class="provider-card" data-coin="BTC">
-                            <div class="provider-icon">₿</div>
-                            <div class="provider-name">Bitcoin</div>
+
+                        <!-- Withdraw Tab -->
+                        <div class="tab-pane" id="withdrawTab">
+                            <div class="withdraw-details">
+                                <div class="withdraw-row">
+                                    <label>Available Balance</label>
+                                    <div class="balance-display-small" id="availableBalance">$1000.00</div>
+                                </div>
+                                <div class="withdraw-row">
+                                    <label>Withdraw Amount</label>
+                                    <div class="amount-input-row">
+                                        <input type="number" id="withdrawAmount" min="1" step="1" placeholder="Enter amount" />
+                                        <button class="quick-withdraw" id="withdrawAll">All</button>
+                                    </div>
+                                </div>
+                                <div class="withdraw-row">
+                                    <label>Withdraw To</label>
+                                    <select id="withdrawMethod">
+                                        <option value="USDT">USDT (TRC20)</option>
+                                        <option value="BTC">Bitcoin</option>
+                                        <option value="ETH">Ethereum</option>
+                                    </select>
+                                </div>
+                                <div class="withdraw-row">
+                                    <label>Withdraw Address</label>
+                                    <input type="text" id="withdrawAddress" placeholder="Enter your wallet address" />
+                                </div>
+                                <div class="withdraw-row">
+                                    <label>Simulate Withdrawal (for testing)</label>
+                                    <button id="simulateWithdraw" class="action-btn deal-btn">Withdraw Funds</button>
+                                </div>
+                            </div>
+                            <div class="modal-note">Withdrawal processing time: 1-24 hours. Minimum withdrawal: $10. Fee: 1%.</div>
                         </div>
-                        <div class="provider-card" data-coin="ETH">
-                            <div class="provider-icon">◆</div>
-                            <div class="provider-name">Ethereum</div>
+
+                        <!-- Tip Tab -->
+                        <div class="tab-pane" id="tipTab">
+                            <div class="tip-details">
+                                <div class="tip-row">
+                                    <label>Tip Amount</label>
+                                    <div class="tip-amounts">
+                                        <button class="tip-quick" data-amount="1">$1</button>
+                                        <button class="tip-quick" data-amount="5">$5</button>
+                                        <button class="tip-quick" data-amount="10">$10</button>
+                                        <button class="tip-quick" data-amount="25">$25</button>
+                                        <button class="tip-quick" data-amount="50">$50</button>
+                                        <button class="tip-quick custom">Custom</button>
+                                    </div>
+                                    <input type="number" id="tipAmount" min="1" step="1" placeholder="Enter tip amount" style="display: none;" />
+                                </div>
+                                <div class="tip-row">
+                                    <label>Tip Message (Optional)</label>
+                                    <textarea id="tipMessage" placeholder="Leave a message for the casino..."></textarea>
+                                </div>
+                                <div class="tip-row">
+                                    <label>Simulate Tip (for testing)</label>
+                                    <button id="simulateTip" class="action-btn deal-btn">Send Tip</button>
+                                </div>
+                            </div>
+                            <div class="modal-note">Tips are appreciated but not required. All tips go directly to casino operations.</div>
                         </div>
                     </div>
-                    <div class="deposit-details">
-                        <div class="deposit-row">
-                            <label>Selected Asset</label>
-                            <div id="selectedAsset">USDT (TRC20)</div>
-                        </div>
-                        <div class="deposit-row">
-                            <label>Deposit Address</label>
-                            <div class="address-row">
-                                <input type="text" id="depositAddress" readonly value="TRX-TEST-ADDRESS-1234-ABCD" />
-                                <button id="copyAddress" class="copy-btn"><i class="fas fa-copy"></i></button>
-                            </div>
-                            <div class="address-hint">Send only the selected asset to this address. Sending other assets may result in loss of funds.</div>
-                        </div>
-                        <div class="deposit-row">
-                            <label>Simulate Credit (for testing)</label>
-                            <div class="simulate-row">
-                                <input type="number" id="simulateAmount" min="1" step="1" placeholder="Enter USD amount" />
-                                <button id="simulateCredit" class="action-btn deal-btn">Credit Balance</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-note">To integrate a real provider (e.g., Coinbase Commerce, NowPayments, or Circle), connect their API here to credit deposits automatically.</div>
                 </div>
             </div>
-    </div>
+        </div>
 
     <!-- Audio Elements -->
     <audio id="shuffleSound" preload="auto"></audio>
